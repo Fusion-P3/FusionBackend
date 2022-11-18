@@ -37,8 +37,7 @@
    - As a user, I should be informed with a Notification when I have enough Hydrogen to buy certain elements. eg. If (H >= 6) {alert(“You have enough Hydrogen to fuse into Carbon”)}
 
 # ERD
-![ERD PICTURE](Fusion-Store.png)
-
+![ERD PICTURE](https://raw.githubusercontent.com/220926NET/FusionFrontend/main/Fusion-Store.png)
 # External API
    - Wikipedia API to get snippets about elements
    - Leetcode API for currency
