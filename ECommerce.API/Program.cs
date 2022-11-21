@@ -1,5 +1,7 @@
 using ECommerce.Data;
 using Microsoft.AspNetCore.DataProtection.Repositories;
+using ECommerce.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +23,8 @@ var connectionString = builder.Configuration["ECommerce:ConnectionString"];
 
 builder.Services.AddSingleton<IRepository>
     (sp => new SQLRepository(connectionString, sp.GetRequiredService<ILogger<SQLRepository>>()));
+builder.Services.AddDbContext<fusionContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("FusionDB")));
+builder.Services.AddScoped<IRepository, EFRepositoryAccess>();
 
 builder.Services.AddControllers();
 
