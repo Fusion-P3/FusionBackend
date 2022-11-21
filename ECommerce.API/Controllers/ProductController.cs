@@ -25,13 +25,13 @@ namespace ECommerce.API.Controllers
             _logger.LogInformation("api/product/{id} triggered");
             try
             {
-                return Ok(await _repo.GetProductByIdAsync(id));
                 _logger.LogInformation("api/product/{id} completed successfully");
+                return Ok(await _repo.GetProductByIdAsync(id));
             }
             catch
             {
-                return BadRequest();
                 _logger.LogWarning("api/product/{id} completed with errors");
+                return BadRequest();
             }
         }
 
@@ -41,13 +41,13 @@ namespace ECommerce.API.Controllers
             _logger.LogInformation("api/product triggered");
             try
             {
-                return Ok(await _repo.GetAllProductsAsync());
                 _logger.LogInformation("api/product completed successfully");
+                return Ok(await _repo.GetAllProductsAsync());
             }
             catch
             {
-                return BadRequest();
                 _logger.LogWarning("api/product completed with errors");
+                return BadRequest();
             }
         }
 
@@ -71,13 +71,13 @@ namespace ECommerce.API.Controllers
                         throw new Exception("Insuffecient inventory.");
                     }
                 }
-                return Ok(products);
                 _logger.LogInformation("PATCH api/product completed successfully");
+                return Ok(products);
             }
             catch
             {
-                return BadRequest();
                 _logger.LogWarning("PATCH api/product completed with errors");
+                return BadRequest();
 
             }
 

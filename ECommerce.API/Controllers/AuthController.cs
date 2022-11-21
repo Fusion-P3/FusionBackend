@@ -26,13 +26,13 @@ namespace ECommerce.API.Controllers
             _logger.LogInformation("auth/register triggered");
             try
             {
-                return Ok(await _repo.CreateNewUserAndReturnUserIdAsync(newUser));
                 _logger.LogInformation("auth/register completed successfully");
+                return Ok(await _repo.CreateNewUserAndReturnUserIdAsync(newUser));
             }
             catch
             {
-                return BadRequest();
                 _logger.LogWarning("auth/register completed with errors");
+                return BadRequest();
             }
         }
 
@@ -44,13 +44,20 @@ namespace ECommerce.API.Controllers
             _logger.LogInformation("auth/login triggered");
             try
             {
-                return Ok(await _repo.GetUserLoginAsync(LR.password, LR.email));
+                if (LR.email == null || LR.password == null)
+                {
+                    _logger.LogInformation("Null values for email/password");
+                    return BadRequest();
+
+                } 
+
                 _logger.LogInformation("auth/login completed successfully");
+                return Ok(await _repo.GetUserLoginAsync(LR.password, LR.email));
             }
             catch
             {
-                return BadRequest();
                 _logger.LogWarning("auth/login completed with errors");
+                return BadRequest();
             }
         }
 
@@ -59,8 +66,8 @@ namespace ECommerce.API.Controllers
         public ActionResult Logout()
         { 
             _logger.LogInformation("auth/logout triggered");
-            return Ok();
             _logger.LogInformation("auth/logout completed successfully");
+            return Ok();
         }
 
     }
