@@ -8,8 +8,8 @@ namespace ECommerce.Models
 {
     public class UserDTO
     {
-        public string email { get; set; }
-        public string password { get; set; }
+        public string? email { get; set; }
+        public string? password { get; set; }
 
         public UserDTO() { }
         public UserDTO( string email, string password) 
