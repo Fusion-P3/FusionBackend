@@ -46,15 +46,16 @@ namespace ECommerce.API.Controllers
             _logger.LogInformation("auth/login triggered");
             try
             {
-                if (LR.email == null || LR.password == null)
+                if (LR.username == null || LR.password == null)
                 {
                     _logger.LogInformation("Null values for email/password");
                     return BadRequest();
 
-                } 
+                }
 
+                UserDTO LoginAuth = _service.LoginUser(LR);
                 _logger.LogInformation("auth/login completed successfully");
-                return Ok();
+                return LoginAuth.username == null ? BadRequest("Unable to login.") : Ok(LoginAuth);
             }
             catch
             {
@@ -66,7 +67,7 @@ namespace ECommerce.API.Controllers
         [Route("auth/logout")]
         [HttpPost]
         public ActionResult Logout()
-        { 
+        {
             _logger.LogInformation("auth/logout triggered");
             _logger.LogInformation("auth/logout completed successfully");
             return Ok();

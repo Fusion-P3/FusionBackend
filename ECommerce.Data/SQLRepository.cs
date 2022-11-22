@@ -189,5 +189,15 @@ namespace ECommerce.Data
         {
             throw new NotImplementedException();
         }
+
+        public Task<Entities.User> GetUserByUsernameAsync(string? username)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Entities.User GetUserByUsername(string? username)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

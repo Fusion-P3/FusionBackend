@@ -29,6 +29,15 @@ public class EFRepositoryAccess : IRepository
         throw new NotImplementedException();
     }
 
+    public User GetUserByUsername(string? username)
+    {
+        List<User> user = _DBcontext.Users.Where(x => x.UserName == username).ToList<User>();
+        if (user.Count == 0) {
+            return new User();
+        }
+        return user.ElementAt(0);
+    }
+
     public Task<User> GetUserLoginAsync(string password, string email)
     {
         throw new NotImplementedException();
