@@ -21,6 +21,7 @@ namespace ECommerce.Data.Entities
         public virtual DbSet<OrderDetail> OrderDetails { get; set; } = null!;
         public virtual DbSet<OrderItem> OrderItems { get; set; } = null!;
         public virtual DbSet<Product> Products { get; set; } = null!;
+        public virtual DbSet<SuperHero> SuperHeroes { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -136,12 +137,28 @@ namespace ECommerce.Data.Entities
                 entity.Property(e => e.ProductName).HasMaxLength(255);
             });
 
+            modelBuilder.Entity<SuperHero>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.Property(e => e.FirstName).HasMaxLength(50);
+
+                entity.Property(e => e.LastName).HasMaxLength(50);
+
+                entity.Property(e => e.Name).HasMaxLength(50);
+
+                entity.Property(e => e.Place).HasMaxLength(50);
+            });
+
             modelBuilder.Entity<User>(entity =>
             {
                 entity.HasIndex(e => e.LeetCode, "UQ__Users__37FA644C9F4EBD69")
                     .IsUnique();
 
                 entity.HasIndex(e => e.UserName, "UQ__Users__C9F28456000CB589")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.UserName, "uk_username")
                     .IsUnique();
 
                 entity.Property(e => e.Id)

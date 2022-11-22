@@ -11,9 +11,12 @@ public class EFRepositoryAccess : IRepository
         _DBcontext = dbcontext;
     }
 
-    public Task<int> CreateNewUserAndReturnUserIdAsync(Models.User newUser)
+    public async Task<Guid> CreateNewUserAndReturnUserIdAsync(User newUser)
     {
-        throw new NotImplementedException();
+        await _DBcontext.Users.AddAsync(newUser);
+        await _DBcontext.SaveChangesAsync();
+        Guid id = _DBcontext.Users.Where(x => x.Id == newUser.Id).ToList<User>().ElementAt(0).Id;
+        return id;
     }
 
     public Task<IEnumerable<Models.Product>> GetAllProductsAsync()
@@ -26,7 +29,7 @@ public class EFRepositoryAccess : IRepository
         throw new NotImplementedException();
     }
 
-    public Task<Models.User> GetUserLoginAsync(string password, string email)
+    public Task<User> GetUserLoginAsync(string password, string email)
     {
         throw new NotImplementedException();
     }

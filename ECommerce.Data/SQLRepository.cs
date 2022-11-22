@@ -110,9 +110,9 @@ namespace ECommerce.Data
             _logger.LogInformation("Executed ReduceInventoryAsync");
         }
 
-        public async Task<User> GetUserLoginAsync(string password, string email)
+        public async Task<UserRegisterDTO> GetUserLoginAsync(string password, string email)
         {
-            User user = new User();
+            UserRegisterDTO user = new UserRegisterDTO();
 
             using SqlConnection connection = new SqlConnection(_connectionString);
             await connection.OpenAsync();
@@ -140,7 +140,7 @@ namespace ECommerce.Data
                 _logger.LogInformation(userEmail);
                 _logger.LogInformation(userPassword);
 
-                user = new User(userFirstName, userLastName, userEmail, userPassword);
+                user = new UserRegisterDTO();
             }
 
             await connection.CloseAsync();
@@ -152,7 +152,7 @@ namespace ECommerce.Data
             return user;
         }
 
-        public async Task<int> CreateNewUserAndReturnUserIdAsync(User newUser)
+        public async Task<int> CreateNewUserAndReturnUserIdAsync(UserRegisterDTO newUser)
         {
             int UserId = 0;
 
@@ -169,7 +169,7 @@ namespace ECommerce.Data
 
             cmd.Parameters.AddWithValue("@UFN", newUser.firstName);
             cmd.Parameters.AddWithValue("@ULN", newUser.lastName);
-            cmd.Parameters.AddWithValue("@UEM", newUser.email);
+            cmd.Parameters.AddWithValue("@UEM", newUser.username);
             cmd.Parameters.AddWithValue("@UPW", newUser.password);
 
             using SqlDataReader reader = await cmd.ExecuteReaderAsync();
@@ -183,6 +183,11 @@ namespace ECommerce.Data
             _logger.LogInformation($"Executed CreateNewUserAsync");
 
             return UserId;
+        }
+
+        public Task<Guid> CreateNewUserAndReturnUserIdAsync(Entities.User newUser)
+        {
+            throw new NotImplementedException();
         }
     }
 }
