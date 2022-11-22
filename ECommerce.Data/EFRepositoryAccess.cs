@@ -19,9 +19,23 @@ public class EFRepositoryAccess : IRepository
         return id;
     }
 
-    public Task<IEnumerable<Models.Product>> GetAllProductsAsync()
+    public List<Models.Product> GetAllProducts()
     {
-        throw new NotImplementedException();
+        List<Models.Product> products = new();
+        foreach (var product in _DBcontext.Products)
+        {
+            Models.Product productDTO = new()
+            productDTO.id = product.Id;
+            productDTO.name = product.ProductName;
+            productDTO.quantity = product.ProductQuantity;
+            productDTO.price = product.ProductPrice;
+            productDTO.description = product.ProductDescription;
+            productDTO.image = product.ProductImage;
+
+            products.Add(productDTO);
+
+        }
+        return products;
     }
 
     public Task<Models.Product> GetProductByIdAsync(int id)
