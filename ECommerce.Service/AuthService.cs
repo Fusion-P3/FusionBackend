@@ -52,4 +52,18 @@ public class AuthService : IAuthService
             return computedHash.SequenceEqual(passwordHash);
         }
     }
+
+    public UserDTO LoginUser(UserDTO lR)
+    {
+        User user = _repo.GetUserByUsername(lR.username);
+        if(user.UserName == null){
+            return new UserDTO();
+        }
+
+        if(VerifyPasswordHash(lR.password!, user.PasswordHash!, user.PasswordSalt!)){
+            return lR;
+        } else {
+            return new UserDTO();
+        }
+    }
 }

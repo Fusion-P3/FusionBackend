@@ -10,5 +10,6 @@ namespace ECommerce.Data
         // public Task ReduceInventoryByIdAsync(int id, int purchased);
         // public Task<User> GetUserLoginAsync(string password, string email);
         public Task<Guid> CreateNewUserAndReturnUserIdAsync(User newUser);
+        User GetUserByUsername(string? username);
     }
 }
