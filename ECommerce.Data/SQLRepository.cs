@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Data
 {
-    public class SQLRepository : IRepository
+    public class SQLRepository
     {
         private readonly string _connectionString;
         private readonly ILogger<SQLRepository> _logger;
@@ -21,69 +21,69 @@ namespace ECommerce.Data
             this._logger = logger;
         }
 
-        public async Task<IEnumerable<Product>> GetAllProductsAsync()
-        {
-            List<Product> products = new List<Product>();
+        // public async Task<IEnumerable<Product>> GetAllProductsAsync()
+        // {
+        //     List<Product> products = new List<Product>();
 
-            using SqlConnection connection = new SqlConnection(_connectionString);
+        //     using SqlConnection connection = new SqlConnection(_connectionString);
 
-            await connection.OpenAsync();
+        //     await connection.OpenAsync();
 
-            string cmdText = "SELECT [ProductId], [ProductName], [ProductQuantity], [ProductPrice], [ProductDescription],[ProductImage] FROM [ecd].[Products];";
+        //     string cmdText = "SELECT [ProductId], [ProductName], [ProductQuantity], [ProductPrice], [ProductDescription],[ProductImage] FROM [ecd].[Products];";
 
-            using SqlCommand cmd = new SqlCommand(cmdText, connection);
-            using SqlDataReader reader = await cmd.ExecuteReaderAsync();
+        //     using SqlCommand cmd = new SqlCommand(cmdText, connection);
+        //     using SqlDataReader reader = await cmd.ExecuteReaderAsync();
 
-            while (reader.Read())
-            {
-                int id = reader.GetInt32(0);
-                string name = reader.GetString(1);
-                int quant = reader.GetInt32(2);
-                decimal price = reader.GetDecimal(3);
-                string desc = reader.GetString(4);
-                string image = reader.GetString(5);
+        //     while (reader.Read())
+        //     {
+        //         int id = reader.GetInt32(0);
+        //         string name = reader.GetString(1);
+        //         int quant = reader.GetInt32(2);
+        //         decimal price = reader.GetDecimal(3);
+        //         string desc = reader.GetString(4);
+        //         string image = reader.GetString(5);
 
-                products.Add(new Product(id, name, quant, price, desc, image));
-            }
+        //         products.Add(new Product(id, name, quant, price, desc, image));
+        //     }
 
-            await connection.CloseAsync();
+        //     await connection.CloseAsync();
 
-            _logger.LogInformation("Executed GetAllProductsAsync");
+        //     _logger.LogInformation("Executed GetAllProductsAsync");
 
-            return products;
-        }
+        //     return products;
+        // }
 
-        public async Task<Product> GetProductByIdAsync(int id)
-        {
-            using SqlConnection connection = new SqlConnection(_connectionString);
+        // public async Task<Product> GetProductByIdAsync(int id)
+        // {
+        //     using SqlConnection connection = new SqlConnection(_connectionString);
 
-            await connection.OpenAsync();
+        //     await connection.OpenAsync();
 
-            string cmdText = @"SELECT * FROM [ecd].[Products] WHERE [ProductId] = @ID;";
+        //     string cmdText = @"SELECT * FROM [ecd].[Products] WHERE [ProductId] = @ID;";
 
-            using SqlCommand cmd = new SqlCommand(cmdText, connection);
+        //     using SqlCommand cmd = new SqlCommand(cmdText, connection);
 
-            cmd.Parameters.AddWithValue("@ID", id);
+        //     cmd.Parameters.AddWithValue("@ID", id);
 
-            using SqlDataReader reader = await cmd.ExecuteReaderAsync();
+        //     using SqlDataReader reader = await cmd.ExecuteReaderAsync();
 
-            Product tmp = new Product();
-            while (reader.Read())
-            {
-                tmp.id = id;
-                tmp.name = reader.GetString(1);
-                tmp.quantity = reader.GetInt32(2);
-                tmp.price = reader.GetDecimal(3);
-                tmp.description = reader.GetString(4);
-                tmp.image = reader.GetString(5);
-            }
+        //     Product tmp = new Product();
+        //     while (reader.Read())
+        //     {
+        //         tmp.id = id;
+        //         tmp.name = reader.GetString(1);
+        //         tmp.quantity = reader.GetInt32(2);
+        //         tmp.price = reader.GetDecimal(3);
+        //         tmp.description = reader.GetString(4);
+        //         tmp.image = reader.GetString(5);
+        //     }
 
-            await connection.CloseAsync();
+        //     await connection.CloseAsync();
 
-            _logger.LogInformation("Executed GetProductByIdAsync");
+        //     _logger.LogInformation("Executed GetProductByIdAsync");
 
-            return tmp;
-        }
+        //     return tmp;
+        // }
 
         public async Task ReduceInventoryByIdAsync(int id, int purchased)
         {

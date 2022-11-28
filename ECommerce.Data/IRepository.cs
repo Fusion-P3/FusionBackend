@@ -5,9 +5,9 @@ namespace ECommerce.Data
 {
     public interface IRepository
     {
-        // public Task<IEnumerable<Product>> GetAllProductsAsync();
-        // public Task<Product> GetProductByIdAsync(int id);
-        // public Task ReduceInventoryByIdAsync(int id, int purchased);
+        public List<Entities.Product> GetAllProducts();
+        public Task<Entities.Product?> GetProductByIdAsync(Guid id);
+        public Task ReduceInventoryByIdAsync(Guid id, int purchased);
         // public Task<User> GetUserLoginAsync(string password, string email);
         public Task<Guid> CreateNewUserAndReturnUserIdAsync(User newUser);
         User GetUserByUsername(string? username);
