@@ -224,10 +224,5 @@ namespace ECommerce.Data
         {
             throw new NotImplementedException();
         }
-
-        Task IRepository.ClearCart(Guid user_id)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
