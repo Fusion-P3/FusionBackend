@@ -8,16 +8,16 @@ namespace ECommerce.Models
 {
     public class Product
     {
-        public int id { get; set; }
+        public Guid id { get; set; }
         public string? name { get; set; }
-        public int quantity { get; set; }
-        public decimal price { get; set; }
+        public int? quantity { get; set; }
+        public int? price { get; set; }
         public string? description { get; set; }
         public string? image { get; set; }
 
         public Product() { }
 
-        public Product(int id, string name, int quantity, decimal price, string description, string image)
+        public Product(Guid id, string name, int quantity, int price, string description, string image)
         {
             this.id = id;
             this.name = name;

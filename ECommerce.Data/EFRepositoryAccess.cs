@@ -1,4 +1,5 @@
 using ECommerce.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce.Data;
 
@@ -36,9 +37,9 @@ public class EFRepositoryAccess : IRepository
         return id;
     }
 
-    public Task<IEnumerable<Models.Product>> GetAllProductsAsync()
+    public List<Product> GetAllProducts()
     {
-        throw new NotImplementedException();
+        return _DBcontext.Products.ToList();
     }
 
     public List<CartItem> GetCartItemsByUserId(Guid user_id)
@@ -46,15 +47,17 @@ public class EFRepositoryAccess : IRepository
         return _DBcontext.CartItems.Where(x => x.UserId == user_id).ToList();
     }
 
-    public Task<Models.Product> GetProductByIdAsync(int id)
+    public async Task<Product?> GetProductByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var productEnt = await _DBcontext.Products.FirstOrDefaultAsync<Product>(x => x.Id == id);
+        return productEnt;
     }
 
     public User GetUserByUsername(string? username)
     {
         List<User> user = _DBcontext.Users.Where(x => x.UserName == username).ToList<User>();
         if (user.Count == 0)
+
         {
             return new User();
         }
@@ -66,7 +69,7 @@ public class EFRepositoryAccess : IRepository
         throw new NotImplementedException();
     }
 
-    public Task ReduceInventoryByIdAsync(int id, int purchased)
+    public Task ReduceInventoryByIdAsync(Guid id, int purchased)
     {
         throw new NotImplementedException();
     }

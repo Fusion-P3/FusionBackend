@@ -22,11 +22,12 @@ builder.Services.AddCors(options =>
 
 var connectionString = builder.Configuration["ECommerce:ConnectionString"];
 
-builder.Services.AddSingleton<IRepository>
-    (sp => new SQLRepository(connectionString, sp.GetRequiredService<ILogger<SQLRepository>>()));
+// builder.Services.AddSingleton<IRepository>
+//     (sp => new EFRepositoryAccess(connectionString, sp.GetRequiredService<ILogger<EFRepositoryAccess>>()));
 builder.Services.AddDbContext<fusionContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("FusionDB")));
 builder.Services.AddScoped<IRepository, EFRepositoryAccess>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICheckoutService, CheckoutService>();
 
 builder.Services.AddControllers();
