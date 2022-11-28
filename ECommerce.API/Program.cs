@@ -27,6 +27,7 @@ var connectionString = builder.Configuration["ECommerce:ConnectionString"];
 builder.Services.AddDbContext<fusionContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("FusionDB")));
 builder.Services.AddScoped<IRepository, EFRepositoryAccess>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddControllers();
 

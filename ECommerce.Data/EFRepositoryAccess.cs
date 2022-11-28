@@ -1,4 +1,5 @@
 using ECommerce.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce.Data;
 
@@ -24,7 +25,8 @@ public class EFRepositoryAccess : IRepository
         List<Models.Product> products = new();
         foreach (var product in _DBcontext.Products)
         {
-            Models.Product productDTO = new()
+            Models.Product productDTO = new();
+
             productDTO.id = product.Id;
             productDTO.name = product.ProductName;
             productDTO.quantity = product.ProductQuantity;
@@ -38,15 +40,28 @@ public class EFRepositoryAccess : IRepository
         return products;
     }
 
-    public Task<Models.Product> GetProductByIdAsync(int id)
+    public async Task<Models.Product> GetProductByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var productEnt = await _DBcontext.Products.FirstOrDefaultAsync<Product>(x => x.Id == id);
+        Models.Product product = new();
+        if (productEnt != null)
+        {
+            product.id = productEnt.Id;
+            product.description = productEnt.ProductDescription;
+            product.image = productEnt.ProductImage;
+            product.name = productEnt.ProductName;
+            product.price = productEnt.ProductPrice;
+            product.quantity = productEnt.ProductQuantity;
+
+        }
+        return product;
     }
 
     public User GetUserByUsername(string? username)
     {
         List<User> user = _DBcontext.Users.Where(x => x.UserName == username).ToList<User>();
-        if (user.Count == 0) {
+        if (user.Count == 0)
+        {
             return new User();
         }
         return user.ElementAt(0);
@@ -57,7 +72,7 @@ public class EFRepositoryAccess : IRepository
         throw new NotImplementedException();
     }
 
-    public Task ReduceInventoryByIdAsync(int id, int purchased)
+    public Task ReduceInventoryByIdAsync(Guid id, int purchased)
     {
         throw new NotImplementedException();
     }

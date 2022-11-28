@@ -22,13 +22,21 @@ namespace ECommerce.API.Controllers
 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetOne(int id)
+        public async Task<ActionResult<Product>> GetOne(Guid id)
         {
             _logger.LogInformation("api/product/{id} triggered");
             try
             {
                 _logger.LogInformation("api/product/{id} completed successfully");
-                return Ok(await _service.GetProductByIdAsync(id));
+                var product = await _service.GetProductByIdAsync(id);
+                if (product.id == id)
+                {
+                    return Ok(product);
+                }
+                else
+                {
+                    return BadRequest("Invalid ID");
+                }
             }
             catch
             {
@@ -38,13 +46,13 @@ namespace ECommerce.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<Product[]>> GetAll()
+        public ActionResult<List<Product>> GetAll()
         {
             _logger.LogInformation("api/product triggered");
             try
             {
                 _logger.LogInformation("api/product completed successfully");
-                return Ok(await _service.GetAllProducts());
+                return Ok(_service.GetAllProducts());
             }
             catch
             {

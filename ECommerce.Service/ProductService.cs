@@ -15,15 +15,16 @@ public class ProductService : IProductService
     public List<Product> GetAllProducts()
     {
         var products = _repo.GetAllProducts();
-        return products.ToList();
+        return products;
     }
 
-    public Task<Product> GetProductByIdAsync(int id)
+    public async Task<Product> GetProductByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var product = await _repo.GetProductByIdAsync(id);
+        return product;
     }
 
-    public Task ReduceInventoryByIdAsync(int id, int quantity)
+    public Task ReduceInventoryByIdAsync(Guid id, int quantity)
     {
         throw new NotImplementedException();
     }
