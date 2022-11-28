@@ -20,41 +20,15 @@ public class EFRepositoryAccess : IRepository
         return id;
     }
 
-    public List<Models.Product> GetAllProducts()
+    public List<Product> GetAllProducts()
     {
-        List<Models.Product> products = new();
-        foreach (var product in _DBcontext.Products)
-        {
-            Models.Product productDTO = new();
-
-            productDTO.id = product.Id;
-            productDTO.name = product.ProductName;
-            productDTO.quantity = product.ProductQuantity;
-            productDTO.price = product.ProductPrice;
-            productDTO.description = product.ProductDescription;
-            productDTO.image = product.ProductImage;
-
-            products.Add(productDTO);
-
-        }
-        return products;
+        return _DBcontext.Products.ToList();
     }
 
-    public async Task<Models.Product> GetProductByIdAsync(Guid id)
+    public async Task<Product?> GetProductByIdAsync(Guid id)
     {
         var productEnt = await _DBcontext.Products.FirstOrDefaultAsync<Product>(x => x.Id == id);
-        Models.Product product = new();
-        if (productEnt != null)
-        {
-            product.id = productEnt.Id;
-            product.description = productEnt.ProductDescription;
-            product.image = productEnt.ProductImage;
-            product.name = productEnt.ProductName;
-            product.price = productEnt.ProductPrice;
-            product.quantity = productEnt.ProductQuantity;
-
-        }
-        return product;
+        return productEnt;
     }
 
     public User GetUserByUsername(string? username)

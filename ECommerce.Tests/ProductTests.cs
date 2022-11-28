@@ -18,21 +18,21 @@ public class ProductTests
     }
 
 
-    public static List<ECommerce.Models.Product> products = new();
+    public static List<ECommerce.Data.Entities.Product> products = new();
     public ProductService CreateProductService()
     {
         var repo = new Mock<IRepository>();
         repo.Setup(repo => repo.GetAllProducts()).Returns(products);
         repo.Setup(repo => repo.GetProductByIdAsync(It.IsAny<Guid>())).ReturnsAsync((Guid id) =>
         {
-            foreach (ECommerce.Models.Product product in products)
+            foreach (var product in products)
             {
-                if (product.id == id)
+                if (product.Id == id)
                 {
                     return product;
                 }
             }
-            return new ECommerce.Models.Product();
+            return new ECommerce.Data.Entities.Product();
         });
 
         return new ProductService(repo.Object);
@@ -55,7 +55,13 @@ public class ProductTests
         int price = 10;
         string description = "test description";
         string image = "test image";
-        ECommerce.Models.Product testProd = new(guid, name, quantity, price, description, image);
+        ECommerce.Data.Entities.Product testProd = new();
+        testProd.Id = guid;
+        testProd.ProductName = name;
+        testProd.ProductQuantity = quantity;
+        testProd.ProductPrice = price;
+        testProd.ProductDescription = description;
+        testProd.ProductImage = image;
 
         products.Add(testProd);
         products.Add(testProd);
@@ -76,16 +82,30 @@ public class ProductTests
         Guid guid2 = Guid.NewGuid();
         string name1 = "test";
         string name2 = "test2";
-        int quantity = 10;
+        int quantity1 = 10;
         int quantity2 = 12;
-        int price = 10;
+        int price1 = 10;
         int price2 = 10;
-        string description = "test description";
+        string description1 = "test description";
         string description2 = "test description2";
-        string image = "test image";
+        string image1 = "test image";
         string image2 = "test image2";
-        ECommerce.Models.Product testProd1 = new(guid1, name1, quantity, price, description, image);
-        ECommerce.Models.Product testProd2 = new(guid2, name2, quantity2, price2, description2, image2);
+
+        ECommerce.Data.Entities.Product testProd1 = new();
+        testProd1.Id = guid1;
+        testProd1.ProductName = name1;
+        testProd1.ProductQuantity = quantity1;
+        testProd1.ProductPrice = price1;
+        testProd1.ProductDescription = description1;
+        testProd1.ProductImage = image1;
+
+        ECommerce.Data.Entities.Product testProd2 = new();
+        testProd2.Id = guid2;
+        testProd2.ProductName = name2;
+        testProd2.ProductQuantity = quantity2;
+        testProd2.ProductPrice = price2;
+        testProd2.ProductDescription = description2;
+        testProd2.ProductImage = image2;
 
         products.Add(testProd1);
         products.Add(testProd2);
@@ -101,19 +121,19 @@ public class ProductTests
         Assert.NotNull(product2);
         Assert.NotNull(product3);
 
-        Assert.Equal(testProd1.id, product1.id);
-        Assert.Equal(testProd1.name, product1.name);
-        Assert.Equal(testProd1.quantity, product1.quantity);
-        Assert.Equal(testProd1.price, product1.price);
-        Assert.Equal(testProd1.description, product1.description);
-        Assert.Equal(testProd1.image, product1.image);
+        Assert.Equal(testProd1.Id, product1.id);
+        Assert.Equal(testProd1.ProductName, product1.name);
+        Assert.Equal(testProd1.ProductQuantity, product1.quantity);
+        Assert.Equal(testProd1.ProductPrice, product1.price);
+        Assert.Equal(testProd1.ProductDescription, product1.description);
+        Assert.Equal(testProd1.ProductImage, product1.image);
 
-        Assert.Equal(testProd2.id, product2.id);
-        Assert.Equal(testProd2.name, product2.name);
-        Assert.Equal(testProd2.quantity, product2.quantity);
-        Assert.Equal(testProd2.price, product2.price);
-        Assert.Equal(testProd2.description, product2.description);
-        Assert.Equal(testProd2.image, product2.image);
+        Assert.Equal(testProd2.Id, product2.id);
+        Assert.Equal(testProd2.ProductName, product2.name);
+        Assert.Equal(testProd2.ProductQuantity, product2.quantity);
+        Assert.Equal(testProd2.ProductPrice, product2.price);
+        Assert.Equal(testProd2.ProductDescription, product2.description);
+        Assert.Equal(testProd2.ProductImage, product2.image);
 
         Assert.Equal(product3.id, Guid.Empty);
         Assert.Null(product3.name);
