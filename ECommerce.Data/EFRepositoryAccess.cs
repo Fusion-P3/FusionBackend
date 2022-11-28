@@ -11,6 +11,23 @@ public class EFRepositoryAccess : IRepository
         _DBcontext = dbcontext;
     }
 
+    public async Task<OrderDetail> AddOrderDetailsAsync(OrderDetail detail)
+    {
+        await _DBcontext.OrderDetails.AddAsync(detail);
+        await _DBcontext.SaveChangesAsync();
+        return detail;
+    }
+
+    public async Task ClearCart(Guid user_id)
+    {
+        List<CartItem> items = GetCartItemsByUserId(user_id);
+        foreach (CartItem item in items)
+        {
+            _DBcontext.CartItems.Remove(item);
+        }
+        await _DBcontext.SaveChangesAsync();
+    }
+
     public async Task<Guid> CreateNewUserAndReturnUserIdAsync(User newUser)
     {
         await _DBcontext.Users.AddAsync(newUser);
@@ -24,6 +41,11 @@ public class EFRepositoryAccess : IRepository
         throw new NotImplementedException();
     }
 
+    public List<CartItem> GetCartItemsByUserId(Guid user_id)
+    {
+        return _DBcontext.CartItems.Where(x => x.UserId == user_id).ToList();
+    }
+
     public Task<Models.Product> GetProductByIdAsync(int id)
     {
         throw new NotImplementedException();
@@ -32,7 +54,8 @@ public class EFRepositoryAccess : IRepository
     public User GetUserByUsername(string? username)
     {
         List<User> user = _DBcontext.Users.Where(x => x.UserName == username).ToList<User>();
-        if (user.Count == 0) {
+        if (user.Count == 0)
+        {
             return new User();
         }
         return user.ElementAt(0);
@@ -46,5 +69,14 @@ public class EFRepositoryAccess : IRepository
     public Task ReduceInventoryByIdAsync(int id, int purchased)
     {
         throw new NotImplementedException();
+    }
+
+    public Product SubtractProductQuantity(Guid? productId, int? quantity)
+    {
+        Product p = _DBcontext.Products.Where(x => x.Id == productId).ToArray()[0];
+        p.ProductQuantity -= quantity * p.ProductPrice;
+        _DBcontext.Products.Update(p);
+        p = _DBcontext.Products.Where(x => x.Id == productId).ToArray()[0];
+        return p;
     }
 }
