@@ -20,9 +20,9 @@ public class CheckoutController : ControllerBase
 
     [HttpPost]
     [Route("checkout")]
-    public async Task<ActionResult<CheckoutDTO>> CheckoutAsync(CheckoutDTO checkout)
+    public async Task<ActionResult<CheckoutDto>> CheckoutAsync(CheckoutDto checkout)
     {
-        CheckoutDTO ret = await _service.CheckoutAsync(checkout);
+        CheckoutDto ret = await _service.CheckoutAsync(checkout);
         if (ret.user_id != Guid.Empty)
         {
             _logger.LogInformation("Checkout completed!");

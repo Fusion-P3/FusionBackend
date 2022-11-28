@@ -10,12 +10,12 @@ public class CheckoutTests
     [Fact]
     public void CheckoutDTOWorks()
     {
-        CheckoutDTO dto = new CheckoutDTO();
+        CheckoutDto dto = new CheckoutDto();
         dto.user_id = Guid.NewGuid();
         Assert.NotNull(dto);
         Assert.NotEqual(Guid.Empty, dto.user_id);
     }
-    public CheckoutService CreateService()
+    public static CheckoutService CreateService()
     {
         var repo = new Mock<IRepository>();
         repo.Setup(repo => repo.GetCartItemsByUserId(It.IsAny<Guid>())).Returns((Guid id) =>
@@ -54,8 +54,8 @@ public class CheckoutTests
     public async void CheckoutServiceWorks()
     {
         CheckoutService service = CreateService();
-        CheckoutDTO dto = new CheckoutDTO { user_id = Guid.NewGuid() };
-        CheckoutDTO dto2 = await service.CheckoutAsync(dto);
+        CheckoutDto dto = new CheckoutDto { user_id = Guid.NewGuid() };
+        CheckoutDto dto2 = await service.CheckoutAsync(dto);
         Assert.Equal(dto, dto2);
     }
 }

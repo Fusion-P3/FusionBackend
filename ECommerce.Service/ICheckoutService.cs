@@ -4,5 +4,5 @@ namespace ECommerce.Service;
 
 public interface ICheckoutService
 {
-    public Task<CheckoutDTO> CheckoutAsync(CheckoutDTO checkout);
+    public Task<CheckoutDto> CheckoutAsync(CheckoutDto checkout);
 }

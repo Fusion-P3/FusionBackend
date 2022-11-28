@@ -13,7 +13,7 @@ public class CheckoutService : ICheckoutService
         _repo = repo;
     }
 
-    public async Task<CheckoutDTO> CheckoutAsync(CheckoutDTO checkout)
+    public async Task<CheckoutDto> CheckoutAsync(CheckoutDto checkout)
     {
         List<CartItem> items = _repo.GetCartItemsByUserId(checkout.user_id);
         OrderDetail detail = new OrderDetail
@@ -38,7 +38,7 @@ public class CheckoutService : ICheckoutService
         OrderDetail ret = await _repo.AddOrderDetailsAsync(detail);
         if (ret.UserId == Guid.Empty)
         {
-            return new CheckoutDTO { user_id = Guid.Empty };
+            return new CheckoutDto { user_id = Guid.Empty };
         }
         await _repo.ClearCart(checkout.user_id);
         return checkout;

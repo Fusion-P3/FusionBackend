@@ -1,6 +1,6 @@
 namespace ECommerce.Models;
 
-public class CheckoutDTO
+public class CheckoutDto
 {
     public Guid user_id { get; set; }
 }
