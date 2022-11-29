@@ -52,6 +52,24 @@ public class ProductService : IProductService
 
     }
 
+    public async Task<Product> GetProductByNameAsync(string productName)
+    {
+        var productEnt = await _repo.GetProductByNameAsync(productName);
+
+        Product product = new();
+        if (productEnt != null)
+        {
+            product.id = productEnt.Id;
+            product.description = productEnt.ProductDescription;
+            product.image = productEnt.ProductImage;
+            product.name = productEnt.ProductName;
+            product.price = productEnt.ProductPrice;
+            product.quantity = productEnt.ProductQuantity;
+
+        }
+        return product;
+    }
+
     public Task ReduceInventoryByIdAsync(Guid id, int quantity)
     {
         throw new NotImplementedException();

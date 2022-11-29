@@ -21,15 +21,15 @@ namespace ECommerce.API.Controllers
         }
 
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetOne(Guid id)
+        [HttpGet("{productName}")]
+        public async Task<ActionResult<Product>> GetOne(string productName)
         {
-            _logger.LogInformation("api/product/{id} triggered");
+            _logger.LogInformation("api/product/{productName} triggered");
             try
             {
-                _logger.LogInformation("api/product/{id} completed successfully");
-                var product = await _service.GetProductByIdAsync(id);
-                if (product.id == id)
+                _logger.LogInformation("api/product/{productName} completed successfully");
+                Product product = await _service.GetProductByNameAsync(productName);
+                if (product.name != null)
                 {
                     return Ok(product);
                 }

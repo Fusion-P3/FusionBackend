@@ -6,5 +6,6 @@ public interface IProductService
 {
     public List<Product> GetAllProducts();
     public Task<Product> GetProductByIdAsync(Guid id);
+    public Task<Product> GetProductByNameAsync(string productName);
     public Task ReduceInventoryByIdAsync(Guid id, int quantity);
 }
