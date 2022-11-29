@@ -28,6 +28,7 @@ builder.Services.AddDbContext<fusionContext>(options => options.UseSqlServer(bui
 builder.Services.AddScoped<IRepository, EFRepositoryAccess>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ICheckoutService, CheckoutService>();
 
 builder.Services.AddControllers();
 

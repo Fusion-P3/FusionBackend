@@ -199,5 +199,30 @@ namespace ECommerce.Data
         {
             throw new NotImplementedException();
         }
+
+        public List<Entities.CartItem> GetAllItemsByUserId(Guid user_id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Entities.OrderDetail> AddOrderDetailsAsync(Entities.OrderDetail detail)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Entities.CartItem> GetCartItemsByUserId(Guid user_id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Entities.Product SubtractProductQuantity(Guid? productId, int? quantity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ClearCart(Guid user_id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

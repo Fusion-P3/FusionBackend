@@ -12,6 +12,23 @@ public class EFRepositoryAccess : IRepository
         _DBcontext = dbcontext;
     }
 
+    public async Task<OrderDetail> AddOrderDetailsAsync(OrderDetail detail)
+    {
+        await _DBcontext.OrderDetails.AddAsync(detail);
+        await _DBcontext.SaveChangesAsync();
+        return detail;
+    }
+
+    public async Task ClearCart(Guid user_id)
+    {
+        List<CartItem> items = GetCartItemsByUserId(user_id);
+        foreach (CartItem item in items)
+        {
+            _DBcontext.CartItems.Remove(item);
+        }
+        await _DBcontext.SaveChangesAsync();
+    }
+
     public async Task<Guid> CreateNewUserAndReturnUserIdAsync(User newUser)
     {
         await _DBcontext.Users.AddAsync(newUser);
@@ -25,6 +42,11 @@ public class EFRepositoryAccess : IRepository
         return _DBcontext.Products.ToList();
     }
 
+    public List<CartItem> GetCartItemsByUserId(Guid user_id)
+    {
+        return _DBcontext.CartItems.Where(x => x.UserId == user_id).ToList();
+    }
+
     public async Task<Product?> GetProductByIdAsync(Guid id)
     {
         var productEnt = await _DBcontext.Products.FirstOrDefaultAsync<Product>(x => x.Id == id);
@@ -35,6 +57,7 @@ public class EFRepositoryAccess : IRepository
     {
         List<User> user = _DBcontext.Users.Where(x => x.UserName == username).ToList<User>();
         if (user.Count == 0)
+
         {
             return new User();
         }
@@ -49,5 +72,14 @@ public class EFRepositoryAccess : IRepository
     public Task ReduceInventoryByIdAsync(Guid id, int purchased)
     {
         throw new NotImplementedException();
+    }
+
+    public Product SubtractProductQuantity(Guid? productId, int? quantity)
+    {
+        Product p = _DBcontext.Products.Where(x => x.Id == productId).ToArray()[0];
+        p.ProductQuantity -= quantity * p.ProductPrice;
+        _DBcontext.Products.Update(p);
+        p = _DBcontext.Products.Where(x => x.Id == productId).ToArray()[0];
+        return p;
     }
 }
