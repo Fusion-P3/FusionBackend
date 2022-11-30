@@ -59,6 +59,12 @@ public class EFRepositoryAccess : IRepository
         return productEnt;
     }
 
+    public async Task<Product?> GetProductByNameAsync(string productName)
+    {
+        var productEnt = await _DBcontext.Products.FirstOrDefaultAsync<Product>(x => x.ProductName == productName);
+        return productEnt;
+    }
+
     public User GetUserByUsername(string? username)
     {
         List<User> user = _DBcontext.Users.Where(x => x.UserName == username).ToList<User>();
