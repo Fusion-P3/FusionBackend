@@ -32,9 +32,9 @@ public class CartController : ControllerBase
 
     [HttpPut]
     [Route("api/cart")]
-    public ActionResult<CartDto> SetCart(CartDto cart)
+    public async Task<ActionResult<CartDto>> SetCart(CartDto cart)
     {
-        CartDto dto = _service.UpdateOrCreateCart(cart);
+        CartDto dto = await _service.UpdateOrCreateCart(cart);
         if (dto.userId != Guid.Empty)
         {
             _logger.LogInformation("Cart Updated");
