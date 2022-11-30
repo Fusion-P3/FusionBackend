@@ -5,7 +5,6 @@ using ECommerce.Models;
 namespace ECommerce.API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
 public class CartController : ControllerBase
 {
     private readonly ILogger<CartController> _logger;
@@ -18,7 +17,7 @@ public class CartController : ControllerBase
     }
 
     [HttpGet]
-    [Route("{user_id}")]
+    [Route("api/cart/{user_id}")]
     public ActionResult<Cart> GetCart(Guid user_id)
     {
         Cart ret = _service.GetCartByUserId(user_id);
@@ -32,6 +31,7 @@ public class CartController : ControllerBase
     }
 
     [HttpPut]
+    [Route("api/cart")]
     public ActionResult<CartDto> SetCart(CartDto cart)
     {
         CartDto dto = _service.UpdateOrCreateCart(cart);
