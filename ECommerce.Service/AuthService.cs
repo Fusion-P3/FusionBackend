@@ -56,14 +56,24 @@ public class AuthService : IAuthService
     public UserDTO LoginUser(UserDTO lR)
     {
         User user = _repo.GetUserByUsername(lR.username);
-        if(user.UserName == null){
+        if (user.UserName == null)
+        {
             return new UserDTO();
         }
 
-        if(VerifyPasswordHash(lR.password!, user.PasswordHash!, user.PasswordSalt!)){
+        if (VerifyPasswordHash(lR.password!, user.PasswordHash!, user.PasswordSalt!))
+        {
             return lR;
-        } else {
+        }
+        else
+        {
             return new UserDTO();
         }
+    }
+
+    public Guid GetIdByUsername(string username)
+    {
+        User users = _repo.GetUserByUsername(username);
+        return users.Id;
     }
 }
