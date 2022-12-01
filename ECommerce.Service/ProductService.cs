@@ -33,6 +33,27 @@ public class ProductService : IProductService
         return products;
     }
 
+    public List<Product> GetSaleProducts()
+    {
+        List<Data.Entities.Product> productEnts = _repo.GetSaleProducts();
+        List<Product> products = new();
+        foreach (var product in productEnts)
+        {
+            Models.Product productDTO = new();
+
+            productDTO.id = product.Id;
+            productDTO.name = product.ProductName;
+            productDTO.quantity = product.ProductQuantity;
+            productDTO.price = product.ProductPrice;
+            productDTO.description = product.ProductDescription;
+            productDTO.image = product.ProductImage;
+
+            products.Add(productDTO);
+
+        }
+        return products;
+    }
+
     public async Task<Product> GetProductByIdAsync(Guid id)
     {
         var productEnt = await _repo.GetProductByIdAsync(id);
