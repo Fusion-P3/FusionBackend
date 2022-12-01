@@ -94,6 +94,11 @@ public class AuthTest
 
         user = service.LoginUser(new UserDTO("not in database", "test"));
         Assert.Null(user.username);
+
+        Guid id = service.GetIdByUsername("test");
+        Assert.NotEqual(Guid.Empty, id);
+        id = service.GetIdByUsername("not in there");
+        Assert.Equal(Guid.Empty, id);
         users.Clear();
     }
 }
