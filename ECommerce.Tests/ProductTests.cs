@@ -23,6 +23,15 @@ public class ProductTests
     {
         var repo = new Mock<IRepository>();
         repo.Setup(repo => repo.GetAllProducts()).Returns(products);
+        repo.Setup(repo => repo.GetSaleProducts()).Returns(() => 
+        {
+            List<ECommerce.Data.Entities.Product> result = new List<ECommerce.Data.Entities.Product>();
+            foreach (var product in products)
+            {
+                if (product.ProductName == "test2") result.Add(product);
+            }
+            return result;
+        });
         repo.Setup(repo => repo.GetProductByIdAsync(It.IsAny<Guid>())).ReturnsAsync((Guid id) =>
         {
             foreach (var product in products)
@@ -57,7 +66,7 @@ public class ProductTests
     }
 
     [Fact]
-    public async void CanGetAllProducts()
+    public void CanGetAllProducts()
     {
         var service = CreateProductService();
         Guid guid = Guid.NewGuid();
@@ -82,6 +91,51 @@ public class ProductTests
         List<ECommerce.Models.Product> retrievedProds = service.GetAllProducts();
         Assert.NotNull(retrievedProds);
         Assert.Equal(products.Count, retrievedProds.Count);
+        products.Clear();
+    }
+
+    [Fact]
+    public void CanGetSaleProducts()
+    {
+        var service = CreateProductService();
+        Guid guid1 = Guid.NewGuid();
+        Guid guid2 = Guid.NewGuid();
+        string name1 = "test";
+        string name2 = "test2";
+        int quantity1 = 10;
+        int quantity2 = 12;
+        int price1 = 10;
+        int price2 = 10;
+        string description1 = "test description";
+        string description2 = "test description2";
+        string image1 = "test image";
+        string image2 = "test image2";
+
+        ECommerce.Data.Entities.Product testProd1 = new();
+        testProd1.Id = guid1;
+        testProd1.ProductName = name1;
+        testProd1.ProductQuantity = quantity1;
+        testProd1.ProductPrice = price1;
+        testProd1.ProductDescription = description1;
+        testProd1.ProductImage = image1;
+
+        ECommerce.Data.Entities.Product testProd2 = new();
+        testProd2.Id = guid2;
+        testProd2.ProductName = name2;
+        testProd2.ProductQuantity = quantity2;
+        testProd2.ProductPrice = price2;
+        testProd2.ProductDescription = description2;
+        testProd2.ProductImage = image2;
+
+        products.Add(testProd1);
+        products.Add(testProd2);
+        products.Add(testProd1);
+        products.Add(testProd2);
+
+        List<ECommerce.Models.Product> retrievedProds = service.GetSaleProducts();
+        Assert.NotNull(retrievedProds);
+        Assert.Equal(2, retrievedProds.Count);
+        Assert.Equal(name2, retrievedProds[0].name);
         products.Clear();
     }
 

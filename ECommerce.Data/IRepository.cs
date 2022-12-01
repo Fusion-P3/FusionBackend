@@ -16,6 +16,7 @@ namespace ECommerce.Data
         public Task<Guid> CreateNewUserAndReturnUserIdAsync(User newUser);
         public List<CartItem> GetCartItemsByUserId(Guid user_id);
         public User GetUserByUsername(string? username);
+        public List<Entities.Product> GetSaleProducts();
         Entities.Product SubtractProductQuantity(Guid? productId, int? quantity);
         Task AddCartItem(CartItem item);
     }

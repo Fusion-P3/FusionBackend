@@ -61,6 +61,23 @@ namespace ECommerce.API.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("sale")]
+        public ActionResult<List<Product>> GetAllSale()
+        {
+            _logger.LogInformation("api/product triggered");
+            try
+            {
+                _logger.LogInformation("api/product completed successfully");
+                return Ok(_service.GetSaleProducts());
+            }
+            catch
+            {
+                _logger.LogWarning("api/product completed with errors");
+                return BadRequest();
+            }
+        }
+
         [HttpPatch]
         public async Task<ActionResult<Product[]>> Purchase([FromBody] ProductDTO[] purchaseProducts)
         {
