@@ -57,12 +57,12 @@ public class CartTests
     }
 
     [Fact]
-    public void CartServiceWorks()
+    public async Task CartServiceWorks()
     {
         CartService service = CreateServie();
         Cart cart = service.GetCartByUserId(idA);
         Assert.NotNull(cart);
-        CartDto dto = service.UpdateOrCreateCart(new CartDto
+        CartDto dto = await service.UpdateOrCreateCart(new CartDto
         {
             userId = idA,
             cart = cart
