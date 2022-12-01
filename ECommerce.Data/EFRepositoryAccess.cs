@@ -12,10 +12,10 @@ public class EFRepositoryAccess : IRepository
         _DBcontext = dbcontext;
     }
 
-    public void AddCartItem(CartItem item)
+    public async Task AddCartItem(CartItem item)
     {
-        _DBcontext.CartItems.Add(item);
-        _DBcontext.SaveChanges();
+        await _DBcontext.CartItems.AddAsync(item);
+        await _DBcontext.SaveChangesAsync();
     }
 
     public async Task<OrderDetail> AddOrderDetailsAsync(OrderDetail detail)

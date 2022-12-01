@@ -33,9 +33,9 @@ public class CartService : ICartService
         return cart;
     }
 
-    public CartDto UpdateOrCreateCart(CartDto cart)
+    public async Task<CartDto> UpdateOrCreateCart(CartDto cart)
     {
-        _repo.ClearCart(cart.userId);
+        await _repo.ClearCart(cart.userId);
         foreach (Models.ProductInternal p in cart.cart!.products)
         {
             CartItem item = new();
@@ -43,7 +43,7 @@ public class CartService : ICartService
             item.ProductId = p.product!.id;
             item.Quantity = p.quantity;
             item.UserId = cart.userId;
-            _repo.AddCartItem(item);
+            await _repo.AddCartItem(item);
         }
         return cart;
     }

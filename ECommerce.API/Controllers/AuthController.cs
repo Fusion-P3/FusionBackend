@@ -41,7 +41,7 @@ namespace ECommerce.API.Controllers
 
         [Route("auth/login")]
         [HttpPost]
-        public async Task<ActionResult<UserDTO>> Login([FromBody] UserDTO LR)
+        public ActionResult<UserDTO> Login([FromBody] UserDTO LR)
         {
             _logger.LogInformation("auth/login triggered");
             try
@@ -71,6 +71,20 @@ namespace ECommerce.API.Controllers
             _logger.LogInformation("auth/logout triggered");
             _logger.LogInformation("auth/logout completed successfully");
             return Ok();
+        }
+
+        [HttpGet]
+        [Route("auth/{username}")]
+        public ActionResult<Guid> GetIdByUsername(string username)
+        {
+            Guid id = _service.GetIdByUsername(username);
+            if (id != Guid.Empty)
+            {
+                _logger.LogInformation($"Sent the id for {username}");
+                return Ok(id);
+            }
+            _logger.LogError("Unable to send user, does it exist");
+            return BadRequest("User does not exist");
         }
 
     }

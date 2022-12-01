@@ -71,4 +71,10 @@ public class AuthService : IAuthService
             return new UserDTO();
         }
     }
+
+    public Guid GetIdByUsername(string username)
+    {
+        User users = _repo.GetUserByUsername(username);
+        return users.Id;
+    }
 }
