@@ -57,7 +57,7 @@ public class ProductTests
     }
 
     [Fact]
-    public async void CanGetAllProducts()
+    public void CanGetAllProducts()
     {
         var service = CreateProductService();
         Guid guid = Guid.NewGuid();
@@ -156,7 +156,7 @@ public class ProductTests
         products.Clear();
     }
 
-        [Fact]
+    [Fact]
     public async void CanGetProductByName()
     {
         var service = CreateProductService();

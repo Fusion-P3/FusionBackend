@@ -18,5 +18,8 @@ namespace ECommerce.Data
         public User GetUserByUsername(string? username);
         Entities.Product SubtractProductQuantity(Guid? productId, int? quantity);
         Task AddCartItem(CartItem item);
+        List<Inventory> GetInventory(Guid userId);
+        Task CreateInventoryItem(Guid userId, Guid productId, int quantity);
+        Task UpdateInventoryItem(Guid userId, Guid productId, int diff);
     }
 }

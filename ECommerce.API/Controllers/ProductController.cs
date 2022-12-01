@@ -61,6 +61,8 @@ namespace ECommerce.API.Controllers
             }
         }
 
+
+
         [HttpPatch]
         public async Task<ActionResult<Product[]>> Purchase([FromBody] ProductDTO[] purchaseProducts)
         {
