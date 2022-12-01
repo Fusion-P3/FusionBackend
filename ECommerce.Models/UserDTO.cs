@@ -11,6 +11,8 @@ namespace ECommerce.Models
         public string? username { get; set; }
         public string? password { get; set; }
 
+        public string? leetCodeName { get; set; }
+
         public UserDTO() { }
         public UserDTO(string username, string password)
         {
