@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Razor.Infrastructure;
+﻿using Microsoft.AspNetCore.Mvc;
 using ECommerce.Models;
-using ECommerce.Data;
 using ECommerce.Service;
+using GraphQL.Client.Http;
+using GraphQL.Client.Serializer.Newtonsoft;
+using GraphQL;
 
 namespace ECommerce.API.Controllers
 {
@@ -12,10 +11,14 @@ namespace ECommerce.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _service;
+        private readonly IInventoryService _inventoryService;
+        private readonly IProductService _productService;
         private readonly ILogger<AuthController> _logger;
 
-        public AuthController(IAuthService service, ILogger<AuthController> logger)
+        public AuthController(IAuthService service, IInventoryService inventoryService, IProductService productService, ILogger<AuthController> logger)
         {
+            this._productService = productService;
+            this._inventoryService = inventoryService;
             this._service = service;
             this._logger = logger;
         }
@@ -29,6 +32,7 @@ namespace ECommerce.API.Controllers
             {
                 _logger.LogInformation("auth/register completed successfully");
                 Guid id = await _service.CreateNewUserAndGetIdAsync(newUser);
+                await _inventoryService.CreateInventoryItem(id, Guid.Parse("33914a4d-5e85-48cf-a443-e70672eb07d0"), 0);
                 return id != Guid.Empty ? Ok(id) : BadRequest("username already taken");
             }
             catch
@@ -41,7 +45,7 @@ namespace ECommerce.API.Controllers
 
         [Route("auth/login")]
         [HttpPost]
-        public ActionResult<UserDTO> Login([FromBody] UserDTO LR)
+        public async Task<ActionResult<UserDTO>> LoginAsync([FromBody] UserDTO LR)
         {
             _logger.LogInformation("auth/login triggered");
             try
@@ -54,6 +58,34 @@ namespace ECommerce.API.Controllers
                 }
 
                 UserDTO LoginAuth = _service.LoginUser(LR);
+                var graphQLClient = new GraphQLHttpClient("https://leetcode.com/graphql", new NewtonsoftJsonSerializer());
+                var leetcodeRequest = new GraphQLRequest
+                {
+                    Query = @"
+                            { matchedUser(username: """ + LoginAuth.leetCodeName + @""") {
+                            username
+                            submitStats: submitStatsGlobal {
+                            acSubmissionNum {
+                            difficulty
+                            count
+                            submissions
+                            }
+                            }
+                            }
+                            }"
+                };
+
+                var graphQLResponse = await graphQLClient.SendQueryAsync<LCResponseType>(leetcodeRequest);
+                int newProbsCompleted = graphQLResponse.Data.matchedUser.submitStats.aCSubmissionNum[0].count;
+                if (LoginAuth.problemsCompleted != newProbsCompleted)
+                {
+                    Guid userId = _service.GetIdByUsername(LoginAuth.username);
+                    await _inventoryService.UpdateInventoryItem(userId, Guid.Parse("33914a4d-5e85-48cf-a443-e70672eb07d0"), (newProbsCompleted - LoginAuth.problemsCompleted.Value) * 5);
+                    await _service.UpdateProblemsCompleted(userId, newProbsCompleted);
+                    LoginAuth.problemsCompleted = newProbsCompleted;
+                }
+
+
                 _logger.LogInformation("auth/login completed successfully");
                 return LoginAuth.username == null ? BadRequest("Unable to login.") : Ok(LoginAuth);
             }

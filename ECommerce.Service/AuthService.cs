@@ -64,6 +64,7 @@ public class AuthService : IAuthService
         if (VerifyPasswordHash(lR.password!, user.PasswordHash!, user.PasswordSalt!))
         {
             lR.leetCodeName = user.LeetCode;
+            lR.problemsCompleted = user.ProblemsCompleted;
             return lR;
         }
         else
@@ -76,5 +77,10 @@ public class AuthService : IAuthService
     {
         User users = _repo.GetUserByUsername(username);
         return users.Id;
+    }
+
+    public async Task UpdateProblemsCompleted(Guid userId, int problemsCompleted)
+    {
+        await _repo.UpdateUserProblemsCompleted(userId, problemsCompleted);
     }
 }

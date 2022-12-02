@@ -86,7 +86,6 @@ public class EFRepositoryAccess : IRepository
     {
         List<User> user = _DBcontext.Users.Where(x => x.UserName == username).ToList<User>();
         if (user.Count == 0)
-
         {
             return new User();
         }
@@ -123,6 +122,17 @@ public class EFRepositoryAccess : IRepository
                 _DBcontext.Inventories.Update(invItem);
                 await _DBcontext.SaveChangesAsync();
             }
+        }
+    }
+
+    public async Task UpdateUserProblemsCompleted(Guid userId, int problemsCompleted)
+    {
+        var user = await _DBcontext.Users.FirstOrDefaultAsync<User>(x => x.Id == userId);
+        if (user != null)
+        {
+            user.ProblemsCompleted = problemsCompleted;
+            _DBcontext.Users.Update(user);
+            await _DBcontext.SaveChangesAsync();
         }
     }
 }
