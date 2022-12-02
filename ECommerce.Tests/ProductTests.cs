@@ -210,7 +210,7 @@ public class ProductTests
         products.Clear();
     }
 
-        [Fact]
+    [Fact]
     public async void CanGetProductByName()
     {
         var service = CreateProductService();

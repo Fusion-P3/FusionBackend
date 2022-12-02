@@ -43,4 +43,7 @@ public class CheckoutService : ICheckoutService
         await _repo.ClearCart(checkout.user_id);
         return checkout;
     }
+
+
+
 }

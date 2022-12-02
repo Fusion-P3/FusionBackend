@@ -8,4 +8,6 @@ public interface IAuthService
     public Task<Guid> CreateNewUserAndGetIdAsync(UserRegisterDTO newUser);
     Guid GetIdByUsername(string username);
     UserDTO LoginUser(UserDTO lR);
+
+    Task UpdateProblemsCompleted(Guid userId, int problemsCompleted);
 }

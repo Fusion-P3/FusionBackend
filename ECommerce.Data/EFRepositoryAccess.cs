@@ -35,6 +35,18 @@ public class EFRepositoryAccess : IRepository
         await _DBcontext.SaveChangesAsync();
     }
 
+    public async Task CreateInventoryItem(Guid userId, Guid productId, int quantity)
+    {
+        Inventory item = new();
+        item.Id = Guid.NewGuid();
+        item.ProductId = productId;
+        item.UserId = userId;
+        item.Quantity = quantity;
+        item.Product = await _DBcontext.Products.FirstOrDefaultAsync<Product>(x => x.Id == productId);
+        await _DBcontext.AddAsync(item);
+        await _DBcontext.SaveChangesAsync();
+    }
+
     public async Task<Guid> CreateNewUserAndReturnUserIdAsync(User newUser)
     {
         await _DBcontext.Users.AddAsync(newUser);
@@ -59,6 +71,11 @@ public class EFRepositoryAccess : IRepository
         return _DBcontext.CartItems.Where(x => x.UserId == user_id).ToList();
     }
 
+    public List<Inventory> GetInventory(Guid userId)
+    {
+        return _DBcontext.Inventories.Where(x => x.UserId == userId).ToList();
+    }
+
     public async Task<Product?> GetProductByIdAsync(Guid id)
     {
         var productEnt = await _DBcontext.Products.FirstOrDefaultAsync<Product>(x => x.Id == id);
@@ -75,7 +92,6 @@ public class EFRepositoryAccess : IRepository
     {
         List<User> user = _DBcontext.Users.Where(x => x.UserName == username).ToList<User>();
         if (user.Count == 0)
-
         {
             return new User();
         }
@@ -99,5 +115,30 @@ public class EFRepositoryAccess : IRepository
         _DBcontext.Products.Update(p);
         p = _DBcontext.Products.Where(x => x.Id == productId).ToArray()[0];
         return p;
+    }
+
+    public async Task UpdateInventoryItem(Guid userId, Guid productId, int diff)
+    {
+        var invItem = await _DBcontext.Inventories.FirstOrDefaultAsync<Inventory>(x => x.UserId == userId && x.ProductId == productId);
+        if (invItem != null)
+        {
+            invItem.Quantity += diff;
+            if (invItem.Quantity < 0)
+            {
+                _DBcontext.Inventories.Update(invItem);
+                await _DBcontext.SaveChangesAsync();
+            }
+        }
+    }
+
+    public async Task UpdateUserProblemsCompleted(Guid userId, int problemsCompleted)
+    {
+        var user = await _DBcontext.Users.FirstOrDefaultAsync<User>(x => x.Id == userId);
+        if (user != null)
+        {
+            user.ProblemsCompleted = problemsCompleted;
+            _DBcontext.Users.Update(user);
+            await _DBcontext.SaveChangesAsync();
+        }
     }
 }
