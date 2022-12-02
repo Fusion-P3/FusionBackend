@@ -57,7 +57,13 @@ public class EFRepositoryAccess : IRepository
 
     public List<Product> GetAllProducts()
     {
-        return _DBcontext.Products.ToList();
+
+        return _DBcontext.Products.Where(x => x.ProductName != "Xenon" && x.ProductName != "Lead").ToList();
+    }
+
+    public List<Product> GetSaleProducts()
+    {
+        return _DBcontext.Products.Where(x => x.ProductName == "Xenon" && x.ProductName == "Lead").ToList();
     }
 
     public List<CartItem> GetCartItemsByUserId(Guid user_id)
