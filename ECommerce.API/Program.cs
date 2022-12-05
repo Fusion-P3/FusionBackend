@@ -7,17 +7,18 @@ using ECommerce.Service;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(
-        policy =>
-        {
-            policy.AllowAnyOrigin()
-                   .AllowAnyMethod()
-                   .AllowAnyHeader();
-        });
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          // Not safe but clears CORS issue.. we can setup a specific orgin when deploying
+                          policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                      });
 });
+
 
 var connectionString = builder.Configuration["ECommerce:ConnectionString"];
 
@@ -40,13 +41,11 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
-app.UseCors();
+app.UseSwagger();
+app.UseSwaggerUI();
+
+
 
 app.UseHttpsRedirection();
 
@@ -54,4 +53,5 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.UseCors(MyAllowSpecificOrigins);
 app.Run();
