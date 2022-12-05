@@ -9,9 +9,9 @@ public class CheckoutService : ICheckoutService
     private readonly IRepository _repo;
     private readonly IInventoryService _inventoryService;
 
-    public CheckoutService(IRepository repo, IInventoryService inventoryService)
+    public CheckoutService(IRepository repo)
     {
-        _inventoryService = inventoryService;
+        _inventoryService = new InventoryService(repo);
         _repo = repo;
     }
 
