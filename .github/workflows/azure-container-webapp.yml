@@ -55,8 +55,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
-          context: 06DevOps/PokemonStorageSystem
-          file: 06DevOps/PokemonStorageSystem/dockerfile
+          context: /
+          file: Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/fusion-backend:${{github.sha}}
   deploy:
