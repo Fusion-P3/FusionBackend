@@ -30,7 +30,7 @@ public class CartTests
     }
 
     public static Guid idA = Guid.NewGuid(), idB = Guid.NewGuid();
-    public static CartService CreateServie()
+    public static CartService CreateService()
     {
         var repo = new Mock<IRepository>();
 
@@ -39,11 +39,13 @@ public class CartTests
             return new List<CartItem> {new CartItem{
                 UserId = id,
                 ProductId = idA,
-                Quantity = 1
+                Quantity = 1,
+                Product = new()
             }, new CartItem{
                 UserId = id,
                 ProductId = idB,
-                Quantity = 40
+                Quantity = 40,
+                Product = new()
             }};
         });
         repo.Setup(repo => repo.GetAllProducts()).Returns(() =>
@@ -59,7 +61,7 @@ public class CartTests
     [Fact]
     public async Task CartServiceWorks()
     {
-        CartService service = CreateServie();
+        CartService service = CreateService();
         Cart cart = service.GetCartByUserId(idA);
         Assert.NotNull(cart);
         CartDto dto = await service.UpdateOrCreateCart(new CartDto
