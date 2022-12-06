@@ -42,6 +42,11 @@ public class CheckoutService : ICheckoutService
                 await _inventoryService.CreateInventoryItem(checkout.user_id, item.ProductId.Value, item.Quantity.Value);
             }
         }
+        bool check = await _repo.UpdateInventoryItem(checkout.user_id, Guid.Parse("33914a4d-5e85-48cf-a443-e70672eb07d0"), -1 * detail.Amount.Value);
+        if (!check)
+        {
+            return new CheckoutDto { user_id = Guid.Empty };
+        }
         OrderDetail ret = await _repo.AddOrderDetailsAsync(detail);
         if (ret.UserId == Guid.Empty)
         {
