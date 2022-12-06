@@ -80,7 +80,7 @@ namespace ECommerce.API.Controllers
                 if (LoginAuth.problemsCompleted != newProbsCompleted)
                 {
                     Guid userId = LoginAuth.userId;
-                    await _inventoryService.UpdateInventoryItem(userId, Guid.Parse("33914a4d-5e85-48cf-a443-e70672eb07d0"), (newProbsCompleted - LoginAuth.problemsCompleted.Value) * 100);
+                    await _inventoryService.UpdateInventoryItem(userId, Guid.Parse("33914a4d-5e85-48cf-a443-e70672eb07d0"), (newProbsCompleted - LoginAuth.problemsCompleted!.Value) * 100);
                     await _service.UpdateProblemsCompleted(userId, newProbsCompleted);
                     LoginAuth.problemsCompleted = newProbsCompleted;
                 }
