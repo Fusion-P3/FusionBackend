@@ -15,7 +15,7 @@ builder.Services.AddCors(options =>
                       policy =>
                       {
                           // Not safe but clears CORS issue.. we can setup a specific orgin when deploying
-                          policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                          policy.WithOrigins("https://witty-smoke-0d6b8740f.2.azurestaticapps.net", "http://localhost:4200").AllowAnyHeader().AllowAnyMethod();
                       });
 });
 
