@@ -18,7 +18,7 @@ public class CartService : ICartService
     public Cart GetCartByUserId(Guid user_id)
     {
         List<CartItem> items = _repo.GetCartItemsByUserId(user_id);
-        List<Models.Product> products = _pservice.GetAllProducts();
+        List<Models.Product> products = _pservice.GetSaleProducts();
         Cart cart = new();
         cart.cartCount = items.Count;
         cart.totalPrice = 0;
