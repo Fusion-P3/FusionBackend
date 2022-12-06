@@ -58,7 +58,7 @@ public class EFRepositoryAccess : IRepository
     public List<Product> GetAllProducts()
     {
 
-        return _DBcontext.Products.Where(x => x.ProductName != "Xenon" && x.ProductName != "Lead").ToList();
+        return _DBcontext.Products.Where(x => x.ProductName != "Xenon" && x.ProductName != "Lead" && x.ProductName != "Hydrogen").ToList();
     }
 
     public List<Product> GetSaleProducts()
