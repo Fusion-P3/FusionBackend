@@ -63,7 +63,7 @@ public class EFRepositoryAccess : IRepository
 
     public List<Product> GetSaleProducts()
     {
-        return _DBcontext.Products.Where(x => x.ProductName == "Xenon" && x.ProductName == "Lead").ToList();
+        return _DBcontext.Products.Where(x => x.ProductName != "Hydrogen").ToList();
     }
 
     public List<CartItem> GetCartItemsByUserId(Guid user_id)
@@ -111,7 +111,7 @@ public class EFRepositoryAccess : IRepository
     public Product SubtractProductQuantity(Guid? productId, int? quantity)
     {
         Product p = _DBcontext.Products.Where(x => x.Id == productId).ToArray()[0];
-        p.ProductQuantity -= quantity * p.ProductPrice;
+        p.ProductQuantity -= quantity;
         _DBcontext.Products.Update(p);
         p = _DBcontext.Products.Where(x => x.Id == productId).ToArray()[0];
         return p;
