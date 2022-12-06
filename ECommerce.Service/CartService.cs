@@ -29,6 +29,7 @@ public class CartService : ICartService
                 quantity = item.Quantity,
                 product = products.Find(x => x.id == item.ProductId)
             });
+            cart.totalPrice += item.Quantity * item.Product.ProductPrice;
         }
         return cart;
     }

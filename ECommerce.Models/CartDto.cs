@@ -9,4 +9,6 @@ public class CartDto
 {
     public Guid userId { get; set; } = Guid.Empty;
     public Cart? cart { get; set; }
+
+    public int totalPrice { get; set; }
 }

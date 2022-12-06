@@ -63,6 +63,7 @@ public class AuthService : IAuthService
 
         if (VerifyPasswordHash(lR.password!, user.PasswordHash!, user.PasswordSalt!))
         {
+            lR.userId = user.Id;
             lR.leetCodeName = user.LeetCode;
             lR.problemsCompleted = user.ProblemsCompleted;
             return lR;

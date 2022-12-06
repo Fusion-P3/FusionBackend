@@ -79,7 +79,7 @@ namespace ECommerce.API.Controllers
                 int newProbsCompleted = graphQLResponse.Data.matchedUser.submitStats.aCSubmissionNum[0].count;
                 if (LoginAuth.problemsCompleted != newProbsCompleted)
                 {
-                    Guid userId = _service.GetIdByUsername(LoginAuth.username);
+                    Guid userId = LoginAuth.userId;
                     await _inventoryService.UpdateInventoryItem(userId, Guid.Parse("33914a4d-5e85-48cf-a443-e70672eb07d0"), (newProbsCompleted - LoginAuth.problemsCompleted.Value) * 5);
                     await _service.UpdateProblemsCompleted(userId, newProbsCompleted);
                     LoginAuth.problemsCompleted = newProbsCompleted;
