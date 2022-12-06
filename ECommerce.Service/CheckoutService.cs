@@ -7,9 +7,11 @@ namespace ECommerce.Service;
 public class CheckoutService : ICheckoutService
 {
     private readonly IRepository _repo;
+    private readonly IInventoryService _inventoryService;
 
     public CheckoutService(IRepository repo)
     {
+        _inventoryService = new InventoryService(repo);
         _repo = repo;
     }
 
@@ -27,13 +29,14 @@ public class CheckoutService : ICheckoutService
         foreach (CartItem item in items)
         {
             Data.Entities.Product p = _repo.SubtractProductQuantity(item.ProductId, item.Quantity);
-            detail.Amount += p.ProductPrice;
+            detail.Amount += p.ProductPrice * item.Quantity;
             detail.OrderItems.Add(new OrderItem
             {
                 Id = Guid.NewGuid(),
                 Product = item.Product,
                 Quantity = item.Quantity
             });
+            await _inventoryService.UpdateInventoryItem(checkout.user_id, item.ProductId!.Value, item.Quantity!.Value);
         }
         OrderDetail ret = await _repo.AddOrderDetailsAsync(detail);
         if (ret.UserId == Guid.Empty)
