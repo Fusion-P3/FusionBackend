@@ -117,18 +117,20 @@ public class EFRepositoryAccess : IRepository
         return p;
     }
 
-    public async Task UpdateInventoryItem(Guid userId, Guid productId, int diff)
+    public async Task<bool> UpdateInventoryItem(Guid userId, Guid productId, int diff)
     {
         var invItem = await _DBcontext.Inventories.FirstOrDefaultAsync<Inventory>(x => x.UserId == userId && x.ProductId == productId);
         if (invItem != null)
         {
             invItem.Quantity += diff;
-            if (invItem.Quantity < 0)
+            if (invItem.Quantity > 0)
             {
                 _DBcontext.Inventories.Update(invItem);
                 await _DBcontext.SaveChangesAsync();
+                return true;
             }
         }
+        return false;
     }
 
     public async Task UpdateUserProblemsCompleted(Guid userId, int problemsCompleted)

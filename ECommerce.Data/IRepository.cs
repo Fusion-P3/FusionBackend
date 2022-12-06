@@ -21,7 +21,7 @@ namespace ECommerce.Data
         Task AddCartItem(CartItem item);
         List<Inventory> GetInventory(Guid userId);
         Task CreateInventoryItem(Guid userId, Guid productId, int quantity);
-        Task UpdateInventoryItem(Guid userId, Guid productId, int diff);
+        Task<bool> UpdateInventoryItem(Guid userId, Guid productId, int diff);
         Task UpdateUserProblemsCompleted(Guid userId, int problemsCompleted);
     }
 }
